@@ -1,15 +1,13 @@
 console.log('App started...');
 
-const fs = require('fs');
 const yargs = require('yargs');
 
 const notes = require('./notes.js');
 
 const args = yargs.argv;
-console.log(args._);
 
 if (args._ == 'add') {
-  notes.addNote();
+  notes.addNote(args.title, args.body);
 } else if (args._ == 'list') {
   notes.listNotes();
 } else if (args._ == 'show') {
