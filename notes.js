@@ -1,18 +1,31 @@
 const fs = require('fs');
 const notesFile = './data/notes.json';
 
-const addNote = (title, body) => {
-  console.log('add note');
-
-  let notes = [];
-  // create note from the cli
-  const note = { title, body };
-
+const fetchNotes = () => {
   // check if file for notes already exists
   if (fs.existsSync(notesFile)) {
     const data = fs.readFileSync(notesFile);
-    notes = JSON.parse(data);
+    return JSON.parse(data);
+  } else {
+    return [];
   }
+};
+
+const saveNotes = (notes) => {
+  fs.writeFileSync(notesFile, JSON.stringify(notes));
+};
+
+const logNote = (note) => {
+  console.log('---');
+  console.log(`Title: ${note.title}`);
+  console.log(`Body: ${note.body}`);
+};
+
+const addNote = (title, body) => {
+  const notes = fetchNotes();
+
+  // create note from the cli
+  const note = { title, body };
 
   // check for duplicate
   const duplicates = notes.filter((note) => note.title === title);
@@ -20,27 +33,53 @@ const addNote = (title, body) => {
   if (duplicates.length === 0) {
     // save new note into file
     notes.push(note);
-    fs.writeFileSync(notesFile, JSON.stringify(notes));
+    saveNotes(notes);
+    console.log(`Note added.`);
+    logNote(note);
   } else {
-    console.log('Title already in Notes');
+    console.log('Title already used.');
   }
-  console.log(notes);
 };
 
-const listNotes = () => {
-  console.log('list all notes');
+const readAllNotes = () => {
+  const notes = fetchNotes();
+  console.log('All notes:');
+
+  if (notes.length) {
+    for (let note of notes) {
+      logNote(note);
+    }
+  } else {
+    console.log(`No Notes found.`);
+  }
 };
 
-const showNote = () => {
-  console.log('show note');
+const readOneNote = (title) => {
+  const notes = fetchNotes();
+  const filteredNotes = notes.filter((note) => note.title === title);
+
+  if (filteredNotes.length) {
+    for (let note of filteredNotes) {
+      logNote(note);
+    }
+  } else {
+    console.log(`No Note with Title: ${title} found.`);
+  }
 };
 
-const removeNote = () => {
-  console.log('remove note');
+const removeNote = (title) => {
+  // fetch notes
+  const notes = fetchNotes();
+  // filter notes, removing the one with title argument
+  const filteredNotes = notes.filter((note) => note.title !== title);
+  // save new notes
+  saveNotes(filteredNotes);
+
+  console.log(`Removed ${notes.length - filteredNotes.length} note(s).`);
 };
 
 const showError = () => {
   console.log('Command not found');
 };
 
-module.exports = { addNote, listNotes, showNote, removeNote, showError };
+module.exports = { addNote, readAllNotes, readOneNote, removeNote, showError };

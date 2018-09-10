@@ -9,11 +9,11 @@ const args = yargs.argv;
 if (args._ == 'add') {
   notes.addNote(args.title, args.body);
 } else if (args._ == 'list') {
-  notes.listNotes();
+  notes.readAllNotes();
 } else if (args._ == 'show') {
-  notes.showNote();
+  notes.readOneNote(args.title);
 } else if (args._ == 'remove') {
-  notes.removeNote();
+  notes.removeNote(args.title);
 } else {
   notes.showError();
 }
