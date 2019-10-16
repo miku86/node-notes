@@ -11,7 +11,7 @@
   "author": "miku86",
   "license": "GPL-3.0-or-later",
   "devDependencies": {
-    "nodemon": "^1.18.4"
+    "nodemon": "1.18.4"
   },
   "dependencies": {
     "yargs": "^12.0.2"
