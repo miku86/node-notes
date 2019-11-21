@@ -38,7 +38,7 @@ npm i
 and run it:
 
 ```sh
-npm start
+node app.js --help
 ```
 
 If you get some errors:
